@@ -1,4 +1,6 @@
+'use client'
 import { forwardRef } from 'react'
+
 import { IMaskInput } from 'react-imask'
 
 interface CustomProps {
@@ -8,6 +10,7 @@ interface CustomProps {
 
 export const CEPMask = forwardRef<HTMLInputElement, CustomProps>((props, ref) => {
   const { onChange, ...other } = props
+
   return (
     <IMaskInput
       {...other}

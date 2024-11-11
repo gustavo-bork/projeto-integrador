@@ -1,10 +1,16 @@
 'use client'
 import { forwardRef } from 'react'
+
 import { IMaskInput } from 'react-imask'
-import { CustomProps } from './Register'
+
+export interface CustomProps {
+  onChange: (event: { target: { name: string; value: string } }) => void
+  name: string
+}
 
 export const TelephoneMask = forwardRef<HTMLInputElement, CustomProps>((props, ref) => {
   const { onChange, ...other } = props
+
   return (
     <IMaskInput
       {...other}

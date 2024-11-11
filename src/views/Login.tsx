@@ -71,6 +71,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
+
       if (emailRef.current === document.activeElement && passwordRef.current) {
         passwordRef.current?.focus()
       }
@@ -84,6 +85,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
 
   const handleLogin = async () => {
     if (emailError) return
+
     if (email.length > 0 && password.length > 0) {
       setSpinner(true)
 

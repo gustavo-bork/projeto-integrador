@@ -1,8 +1,9 @@
 'use client'
 
-import { useImageVariant } from '@/@core/hooks/useImageVariant'
-import { useSettings } from '@core/hooks/useSettings'
-import type { SystemMode } from '@core/types'
+import { useState } from 'react'
+
+import { useRouter } from 'next/navigation'
+
 import {
   Button,
   IconButton,
@@ -15,9 +16,13 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material'
+
 import classnames from 'classnames'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+
+import { useImageVariant } from '@core/hooks/useImageVariant'
+import { useSettings } from '@core/hooks/useSettings'
+import type { SystemMode } from '@core/types'
+
 import { TelephoneMask } from '@components/masks/TelephoneMask'
 import { CEPMask } from '@components/masks/CEPMask'
 
@@ -45,16 +50,12 @@ type UserData = {
   confirmPassword: string
 }
 
-export interface CustomProps {
-  onChange: (event: { target: { name: string; value: string } }) => void
-  name: string
-}
-
 const Register = ({ mode }: { mode: SystemMode }) => {
   // States
   const [activeStep, setActiveStep] = useState(0)
   const [isPasswordShown, setIsPasswordShown] = useState(false)
   const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false)
+
   const [userData, setUserData] = useState<UserData>({
     document: '',
     name: '',
