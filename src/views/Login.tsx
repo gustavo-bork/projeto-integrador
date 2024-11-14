@@ -199,7 +199,7 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
                     component={Link}
                     onClick={e => {
                       e.preventDefault()
-                      router.push('/register')
+                      router.push('/cadastro')
                     }}
                     color='secondary'
                   >
