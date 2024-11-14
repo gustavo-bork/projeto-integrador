@@ -1,8 +1,14 @@
 'use client'
 
+// React imports
 import React, { useEffect, useRef, useState } from 'react'
-import mapboxgl, { LngLatLike, NavigationControl } from 'mapbox-gl'
+
+// Mapbox imports
+import type { LngLatLike } from 'mapbox-gl'
+import mapboxgl, { NavigationControl } from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
+
+// Component imports
 import SearchComponent from './Search'
 
 const Map = () => {

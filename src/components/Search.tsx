@@ -1,5 +1,11 @@
+// React imports
 import { useState } from 'react'
-import { Map, Marker } from 'mapbox-gl'
+
+// Mapbox imports
+import type { Map } from 'mapbox-gl'
+import { Marker } from 'mapbox-gl'
+
+// MUI imports
 import { TextField, Button, Grid, Skeleton } from '@mui/material'
 
 export const SearchComponent = ({ map }: { map: Map }) => {
