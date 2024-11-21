@@ -1,5 +1,9 @@
 // React imports
-import { SyntheticEvent, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
+import type { SyntheticEvent } from 'react'
+
+// Axios import
+import axios from 'axios'
 
 // Mapbox imports
 import type { Map } from 'mapbox-gl'
@@ -10,7 +14,6 @@ import { TextField, Grid, Skeleton } from '@mui/material'
 
 // Custom MUI imports
 import CustomAutocomplete from '@core/components/mui/Autocomplete'
-import axios from 'axios'
 
 interface AddressOption {
   place_name: string
