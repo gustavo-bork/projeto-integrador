@@ -41,7 +41,7 @@ const Layout = async ({ children }: ChildrenType) => {
           </VerticalLayout>
         }
         horizontalLayout={
-          <HorizontalLayout header={<Header />} footer={<HorizontalFooter />}>
+          <HorizontalLayout header={<Header />} footer={null}>
             {children}
           </HorizontalLayout>
         }
