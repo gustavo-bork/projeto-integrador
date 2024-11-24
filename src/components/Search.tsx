@@ -10,7 +10,7 @@ import type { Map } from 'mapbox-gl'
 import { Marker } from 'mapbox-gl'
 
 // MUI imports
-import { TextField, Grid, Skeleton } from '@mui/material'
+import { TextField, Grid } from '@mui/material'
 
 // Custom MUI imports
 import CustomAutocomplete from '@core/components/mui/Autocomplete'
@@ -47,8 +47,6 @@ export const SearchComponent = ({ map }: { map: Map }) => {
 
     setAddresses(addressOptions)
     setLoading(false)
-
-
   }, [])
 
   const handleChange = (event: SyntheticEvent<Element, Event>, value: string | AddressOption | null) => {
@@ -61,28 +59,19 @@ export const SearchComponent = ({ map }: { map: Map }) => {
 
   return (
     <Grid container spacing={2} paddingBottom={2} paddingLeft={2}>
-      {!map ? (
-        <>
-          <Skeleton variant='rectangular' width={250} height={50} />
-        </>
-      ) : (
-        <>
-          <CustomAutocomplete
-            freeSolo
-            open={open}
-            loading={loading}
-            sx={{ width: 250 }}
-            options={addresses}
-            getOptionLabel={option => typeof option === 'string' ? option : option.place_name}
-            onOpen={() => setOpen(true)}
-            onClose={() => setOpen(false)}
-            onChange={handleChange}
-            onInputChange={(_, location) => searchLocation(location)}
-            renderInput={params => (<TextField {...params} label="Pesquisar um local" />)}
-          />
-        </>
-      )
-      }
+      <CustomAutocomplete
+        freeSolo
+        open={open}
+        loading={loading}
+        sx={{ width: 250 }}
+        options={addresses}
+        getOptionLabel={option => typeof option === 'string' ? option : option.place_name}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        onChange={handleChange}
+        onInputChange={(_, location) => searchLocation(location)}
+        renderInput={params => (<TextField {...params} label="Pesquisar um local" />)}
+      />
     </Grid >
   )
 }

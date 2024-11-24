@@ -10,12 +10,14 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 // Component imports
 import SearchComponent from './Search'
+import { Skeleton } from '@mui/material'
 
 const Map = () => {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<mapboxgl.Map | null>(null)
   const [center, setCenter] = useState<LngLatLike>([-49.2730, -25.4277])
   const [zoom, setZoom] = useState(10.12)
+  const [isMapLoaded, setIsMapLoaded] = useState(false)
 
   useEffect(() => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!
@@ -43,14 +45,21 @@ const Map = () => {
 
     const fullscreen = new FullscreenControl()
     map.current.addControl(fullscreen)
+
+    map.current.on('load', () => setIsMapLoaded(true))
+
     return () => map.current?.remove()
   }, [])
 
 
   return (
     <div>
-      <SearchComponent map={map.current!} />
-      <div className='h-[75vh] w-[90vw]' id='map-container' ref={mapContainer} />
+      {isMapLoaded ? (
+        <SearchComponent map={map.current!} />
+      ) : (
+        <Skeleton variant='rectangular' width={250} height={50} />
+      )}
+      <div style={{ width: '70vw', height: '70vh' }} id='map-container' ref={mapContainer} />
     </div>
   )
 }
