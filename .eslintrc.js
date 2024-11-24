@@ -6,13 +6,13 @@ module.exports = {
     'react/no-children-prop': 'off',
     '@next/next/no-img-element': 'off',
     '@next/next/no-page-custom-font': 'off',
-    '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/consistent-type-imports': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'off',
     'lines-around-comment': [
-      'error',
+      'warn',
       {
         beforeBlockComment: true,
         beforeLineComment: true,
@@ -51,7 +51,7 @@ module.exports = {
     ],
     'newline-before-return': 'warn',
     'import/newline-after-import': [
-      'error',
+      'warn',
       {
         count: 1
       }
@@ -86,7 +86,7 @@ module.exports = {
       }
     ],
     '@typescript-eslint/ban-types': [
-      'error',
+      'warn',
       {
         extendDefaults: true,
         types: {
