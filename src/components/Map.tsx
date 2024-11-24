@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 // Mapbox imports
 import type { LngLatLike } from 'mapbox-gl'
-import mapboxgl, { NavigationControl } from 'mapbox-gl'
+import mapboxgl, { NavigationControl, FullscreenControl } from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 // Component imports
@@ -41,6 +41,8 @@ const Map = () => {
     const nav = new NavigationControl()
     map.current.addControl(nav)
 
+    const fullscreen = new FullscreenControl()
+    map.current.addControl(fullscreen)
     return () => map.current?.remove()
   }, [])
 
