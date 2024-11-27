@@ -75,7 +75,7 @@ const Map = () => {
     axios
       .post('/api/home', { center, place_name, userId })
       .then(() => {
-        map.current?.flyTo({ center, essential: true, zoom })
+        map.current?.flyTo({ center, essential: true, zoom: 16 })
         new Marker().setLngLat(center).addTo(map.current!)
         setCenter(center)
       })
