@@ -1,26 +1,23 @@
 // React imports
-import { useCallback, useState } from 'react'
+import { useMemo, useCallback, useState } from 'react'
 import type { SyntheticEvent } from 'react'
 
 // Axios import
 import axios from 'axios'
 
-// Mapbox imports
-import type { Map } from 'mapbox-gl'
-import { Marker } from 'mapbox-gl'
-
 // MUI imports
-import { TextField, Grid } from '@mui/material'
+import { TextField, Grid, debounce } from '@mui/material'
 
 // Custom MUI imports
 import CustomAutocomplete from '@core/components/mui/Autocomplete'
 
-interface AddressOption {
-  place_name: string
-  center: [number, number]
+import type { AddressOption } from './types'
+
+interface SearchProps {
+  onChange: (_: SyntheticEvent<Element, Event>, value: string | AddressOption | null) => void
 }
 
-export const SearchComponent = ({ map }: { map: Map }) => {
+export const SearchComponent = ({ onChange }: SearchProps) => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [addresses, setAddresses] = useState<AddressOption[]>([])
@@ -39,7 +36,6 @@ export const SearchComponent = ({ map }: { map: Map }) => {
         }
       }
     )
-
     const addressOptions = response.data.features.map((feature: any): AddressOption => ({
       place_name: feature.place_name,
       center: feature.center
@@ -49,13 +45,10 @@ export const SearchComponent = ({ map }: { map: Map }) => {
     setLoading(false)
   }, [])
 
-  const handleChange = (event: SyntheticEvent<Element, Event>, value: string | AddressOption | null) => {
-    if (typeof value === 'string' || value === null) return
-
-    const [longitude, latitude] = value.center
-    map.flyTo({ center: [longitude, latitude], essential: true, zoom: 16 })
-    new Marker().setLngLat([longitude, latitude]).addTo(map)
-  }
+  const debouncedSearch = useMemo(
+    () => debounce(searchLocation, 500),
+    [searchLocation]
+  )
 
   return (
     <Grid container spacing={2} paddingBottom={2} paddingLeft={2}>
@@ -63,16 +56,24 @@ export const SearchComponent = ({ map }: { map: Map }) => {
         freeSolo
         open={open}
         loading={loading}
+        filterOptions={(option) => option}
+        loadingText="Carregando..."
+        noOptionsText="Nenhum endereço encontrado"
         sx={{ width: 250 }}
         options={addresses}
         getOptionLabel={option => typeof option === 'string' ? option : option.place_name}
+        onChange={onChange}
+        onInputChange={(_, newValue) => debouncedSearch(newValue)}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
-        onChange={handleChange}
-        onInputChange={(_, location) => searchLocation(location)}
-        renderInput={params => (<TextField {...params} label="Pesquisar um local" />)}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="Pesquisar um local"
+          />
+        )}
       />
-    </Grid >
+    </Grid>
   )
 }
 
