@@ -33,6 +33,8 @@ import Link from '@components/Link'
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
+import axios, { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 const MaskImg = styled('img')({
   blockSize: 'auto',
@@ -83,18 +85,23 @@ const LoginV2 = ({ mode }: { mode: SystemMode }) => {
     if (e.target.validity.valid) setEmailError(false)
   }
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (emailError) return
 
     if (email.length > 0 && password.length > 0) {
       setSpinner(true)
 
-      const user = {
-        email,
-        password
-      }
-
-      router.push('/')
+      axios.post('/api/login', { email, password })
+        .then(resp => {
+          localStorage.setItem('userData', JSON.stringify(resp.data))
+          router.push('/')
+          setSpinner(false)
+        })
+        .catch(error => {
+          console.error(error)
+          setSpinner(false)
+          if (error instanceof AxiosError) toast.error(error?.response?.data?.message)
+        })
     }
   }
 

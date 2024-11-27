@@ -23,6 +23,8 @@ import Button from '@mui/material/Button'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
+import { useLocalStorage } from 'react-use'
+import { User } from '@prisma/client'
 
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
@@ -43,6 +45,7 @@ const UserDropdown = () => {
 
   // Hooks
   const router = useRouter()
+  const [userData] = useLocalStorage<User>('userData')
 
   const { settings } = useSettings()
 
@@ -63,7 +66,7 @@ const UserDropdown = () => {
   }
 
   const handleUserLogout = async () => {
-    // Redirect to login page
+    localStorage.removeItem('userData')
     router.push('/login')
   }
 
@@ -106,28 +109,12 @@ const UserDropdown = () => {
                     <Avatar alt='John Doe' src='/images/avatars/1.png' />
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
-                        John Doe
+                        {userData?.name}
                       </Typography>
-                      <Typography variant='caption'>admin@vuexy.com</Typography>
+                      <Typography variant='caption'>{userData?.email}</Typography>
                     </div>
                   </div>
                   <Divider className='mlb-1' />
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-user text-[22px]' />
-                    <Typography color='text.primary'>My Profile</Typography>
-                  </MenuItem>
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-settings text-[22px]' />
-                    <Typography color='text.primary'>Settings</Typography>
-                  </MenuItem>
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-currency-dollar text-[22px]' />
-                    <Typography color='text.primary'>Pricing</Typography>
-                  </MenuItem>
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='tabler-help-circle text-[22px]' />
-                    <Typography color='text.primary'>FAQ</Typography>
-                  </MenuItem>
                   <div className='flex items-center plb-2 pli-3'>
                     <Button
                       fullWidth
@@ -138,7 +125,7 @@ const UserDropdown = () => {
                       onClick={handleUserLogout}
                       sx={{ '& .MuiButton-endIcon': { marginInlineStart: 1.5 } }}
                     >
-                      Logout
+                      Sair
                     </Button>
                   </div>
                 </MenuList>

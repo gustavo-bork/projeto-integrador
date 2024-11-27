@@ -35,6 +35,10 @@ import { useSettings } from '@core/hooks/useSettings'
 // Core Theme Imports
 import defaultCoreTheme from '@core/theme'
 
+// Toast imports
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
+
 type Props = ChildrenType & {
   direction: Direction
   systemMode: SystemMode
@@ -112,6 +116,7 @@ const ThemeProvider = (props: Props) => {
         <>
           <ModeChanger />
           <CssBaseline />
+          <ToastContainer theme={settings.mode} />
           {children}
         </>
       </CssVarsProvider>
