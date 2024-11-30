@@ -32,6 +32,7 @@ export const SearchComponent = ({ onChange }: SearchProps) => {
         params: {
           access_token,
           autocomplete: true,
+          language: 'pt',
           limit: 5
         }
       }
