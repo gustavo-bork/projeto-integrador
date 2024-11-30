@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import {
   Button,
+  CircularProgress,
   IconButton,
   InputAdornment,
   Link,
@@ -43,6 +44,10 @@ type UserData = {
 const Register = ({ mode }: { mode: SystemMode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
+  const [emailError, setEmailError] = useState(false)
+  const [nameError, setNameError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false)
   const [userData, setUserData] = useState<UserData>({
     name: '',
@@ -78,8 +83,27 @@ const Register = ({ mode }: { mode: SystemMode }) => {
   }
 
   const handleRegister = () => {
+    if (emailError || nameError || passwordError) return
+
+    if (userData.name.length === 0) {
+      setNameError(true)
+      return
+    }
+
+    if (userData.email.length === 0) {
+      setEmailError(true)
+      return
+    }
+
+    if (userData.password.length === 0) {
+      setPasswordError(true)
+      return
+    }
+
+    setLoading(true)
     axios.post('/api/register', userData)
       .then(resp => {
+        setLoading(false)
         localStorage.setItem('userData', JSON.stringify({
           name: userData.name,
           email: userData.email,
@@ -89,6 +113,7 @@ const Register = ({ mode }: { mode: SystemMode }) => {
         router.push('/')
       })
       .catch(error => {
+        setLoading(false)
         console.error(error)
         if (error instanceof AxiosError)
           toast.error(error?.response?.data?.message)
@@ -129,6 +154,15 @@ const Register = ({ mode }: { mode: SystemMode }) => {
               value={userData.name}
               onKeyDown={handleKeyDown}
               onChange={handleChange}
+              onBlur={() => {
+                if (userData.name.length > 0) {
+                  setNameError(false)
+                } else {
+                  setNameError(true)
+                }
+              }}
+              error={nameError}
+              helperText={nameError ? 'Insira um nome' : ''}
             />
             <TextField
               className='my-2'
@@ -141,6 +175,18 @@ const Register = ({ mode }: { mode: SystemMode }) => {
               onKeyDown={handleKeyDown}
               value={userData.email}
               onChange={handleChange}
+              onBlur={e => {
+                if (userData.email.length > 0 && e.target.validity.valid) {
+                  setEmailError(false)
+                } else {
+                  setEmailError(true)
+                }
+              }}
+              error={emailError}
+              helperText={emailError ? 'Insira um e-mail válido' : ''}
+              inputProps={{
+                type: 'email'
+              }}
             />
             <TextField
               className='my-2'
@@ -166,6 +212,8 @@ const Register = ({ mode }: { mode: SystemMode }) => {
               }}
               value={userData.password}
               onChange={handleChange}
+              error={passwordError}
+              helperText={passwordError ? 'As senhas não correspondem' : ''}
             />
             <TextField
               className='my-2'
@@ -191,6 +239,13 @@ const Register = ({ mode }: { mode: SystemMode }) => {
               }}
               value={userData.confirmPassword}
               onChange={handleChange}
+              onBlur={() => {
+                if (userData.password === userData.confirmPassword) {
+                  setPasswordError(false)
+                } else {
+                  setPasswordError(true)
+                }
+              }}
             />
           </div>
           <div className='py-3 flex justify-center items-center flex-wrap gap-2'>
@@ -199,7 +254,7 @@ const Register = ({ mode }: { mode: SystemMode }) => {
               variant='contained'
               onClick={handleRegister}
             >
-              Cadastrar
+              {loading ? <CircularProgress size={24} /> : 'Cadastrar'}
             </Button>
           </div>
           <div className='flex justify-center items-center flex-wrap gap-2'>
