@@ -7,8 +7,11 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { useLocalStorage } from "react-use"
 import { User } from "@prisma/client"
+import { useRouter } from "next/navigation"
 
 const History = () => {
+  const router = useRouter()
+
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const [loading, setLoading] = useState(true)
@@ -17,7 +20,7 @@ const History = () => {
   const userId = userData?.id
 
   const getAddresses = () => {
-    axios.get(`/api/history?userId=${userId}&skip=0&take=5`)
+    userId && axios.get(`/api/history?userId=${userId}`)
       .then(res => {
         setRows(res.data)
         setLoading(false)
@@ -39,6 +42,12 @@ const History = () => {
       }
     )
   }
+
+  useEffect(() => {
+    if (!userData) {
+      router.push('/login')
+    }
+  }, [router])
 
   useEffect(() => {
     getAddresses()
